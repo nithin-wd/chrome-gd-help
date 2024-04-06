@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer {
+	body {
+		@apply text-[#1e1e1e] bg-[#f2f2f2];
+	}
+}
+
