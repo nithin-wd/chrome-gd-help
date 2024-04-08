@@ -122,10 +122,10 @@ function App() {
 			{
 				type: "pm",
 				data: [
-					{ name: "Project coordination", team: "PM", className: "text-yellow-500", code: "wdpc" },
-					{ name: "Team work load & Task management", team: "PM", className: "text-yellow-500", code: "wdtm" },
-					{ name: "Good day housekeeping", team: "PM", className: "text-yellow-500", code: "gdhk" },
-					{ name: "Client approvals / activity", team: "PM", className: "text-yellow-500", code: "clap" }
+					{ name: "Project coordination", team: "Project Management", className: "text-yellow-500", code: "wdpc" },
+					{ name: "Team work load & Task management", team: "Project Management", className: "text-yellow-500", code: "wdtm" },
+					{ name: "Good day housekeeping", team: "Project Management", className: "text-yellow-500", code: "gdhk" },
+					{ name: "Client approvals / activity", team: "Project Management", className: "text-yellow-500", code: "clap" }
 				]
 			},
 			{
