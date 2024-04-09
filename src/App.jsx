@@ -176,135 +176,136 @@ function App() {
 		if (projectInput === "") return projects;
 		return projects.filter(pj => pj.name.toLowerCase().includes(projectInput.toLowerCase()) || pj.code.toLowerCase().includes(projectInput.toLowerCase()));
 	}, [projectInput]);
-
+	const isWeb = import.meta.env.VITE_APP_MODE === "web";
+	console.log({ isWeb, env: import.meta.env.VITE_APP_MODE });
 	return (
-		// <div className="w-screen h-screen flex justify-center items-center">
-		<main className="w-[350px] h-[600px] p-2 shadow-lg border relative">
-			{contextHolder}
-			{showSettings ? (
-				<div>
-					<div className="absolute right-3 top-3">
-						<IoCloseCircleOutline size={20} className="cursor-pointer" onClick={() => setShowSettings(false)} />
-					</div>
-					<div className="flex justify-center py-4 text-[20px] select-none">Settings</div>
-					<div className="w-full">
-						<label>Select Task types</label>
-						<Select
-							className="w-full"
-							mode="multiple"
-							allowClear
-							onChange={handleSelectTaskType}
-							value={taskTypes}
-							defaultValue={["common"]}
-							options={[
-								{ label: "Conversion", value: "conversion" },
-								{ label: "Communication", value: "com" },
-								{ label: "Coverage", value: "coverage" },
-								{ label: "Project Management", value: "pm" },
-								{ label: "Common", value: "common" }
-							]}
-							maxTagCount="responsive"
-							maxTagPlaceholder={omittedValues => (
-								<Tooltip title={omittedValues.map(({ label }) => label).join(", ")}>
-									<span>{`+${omittedValues?.length} more`}</span>
-								</Tooltip>
-							)}
-						/>
-					</div>
-				</div>
-			) : (
-				<div className="h-full">
-					<div className="absolute right-3 top-3">
-						<IoSettings size={20} className="cursor-pointer" onClick={() => setShowSettings(true)} />
-					</div>
-					<div className="flex justify-center py-4 text-[20px] select-none">Goodday Helper</div>
-					<div className="w-full">
-						<div className="flex w-full justify-evenly items-center">
-							<Radio.Group
-								className="grid grid-cols-2 w-full"
-								onChange={handleModeChange}
-								value={mode}
-								style={{
-									marginBottom: 8
-								}}
-							>
-								<Radio.Button value="task" className="text-center">
-									Task Codes
-								</Radio.Button>
-								<Radio.Button value="projects" className="text-center">
-									Project Codes
-								</Radio.Button>
-							</Radio.Group>
+		<div className={cn(isWeb ? "w-screen h-screen flex justify-center items-center" : "")}>
+			<main className="w-[350px] h-[600px] p-2 shadow-lg border relative">
+				{contextHolder}
+				{showSettings ? (
+					<div>
+						<div className="absolute right-3 top-3">
+							<IoCloseCircleOutline size={20} className="cursor-pointer" onClick={() => setShowSettings(false)} />
 						</div>
-
-						<div className="h-[480px]">
-							<div className="h-[30px]">
-								{mode === "projects" ? (
-									<div className="flex flex-col gap-y-[10px]">
-										<Input placeholder="Search for project code" onChange={e => setProjectInput(e.target.value)} value={projectInput} allowClear />
-
-										<div className="h-[440px] bg-white rounded">
-											<div className="h-[40px] flex justify-between text-[14px] font-[500] items-center border py-2 px-3">
-												<span>Name</span>
-												<span>Code</span>
-											</div>
-											<div className="h-[400px] overflow-y-auto py-2 px-3 flex flex-col gap-y-2">
-												{filteredProjects?.map(p => (
-													<div className="flex justify-between items-center" key={p.code}>
-														<span className="text-[12px]">{p.name}</span>
-														<CopyToClipboard text={p.code} onCopy={() => messageApi.info(`${p.code} copied to clipboard`)}>
-															<Tooltip title={`Click to copy ${p.code}`} placement="left">
-																<span className="border rounded px-2 py-1 cursor-context-menu select-none hover:border-blue-400 hover:text-blue-400">
-																	{p.code}
-																</span>
-															</Tooltip>
-														</CopyToClipboard>
-													</div>
-												))}
-											</div>
-										</div>
-									</div>
-								) : (
-									<div className="flex flex-col gap-y-[10px]">
-										<Input placeholder="Search for task code" onChange={e => setTaskInput(e.target.value)} value={taskInput} allowClear />
-										<div className="h-[440px] bg-white rounded">
-											<div className="h-[40px] flex justify-between text-[14px] font-[500] items-center border py-2 px-3">
-												<span>Name</span>
-												<span>Code</span>
-											</div>
-											<div className="h-[400px] overflow-y-auto py-2 px-3 flex flex-col gap-y-2">
-												{showableTask?.map(item => (
-													<div key={item?.team}>
-														<span className={cn("text-[12px] font-[900] leading-[12px] rounded-md", item.className)}>{item?.team}</span>
-														<div className="py-2 px-3 flex flex-col gap-y-2">
-															{item?.data?.map(p => (
-																<div className="flex justify-between items-center" key={p.code}>
-																	<span className="flex items-center gap-x-1">
-																		<span className="text-[12px] leading-[12px]">{p.name}</span>
-																	</span>
-																	<CopyToClipboard text={p.code} onCopy={() => messageApi.info(`${p.code} copied to clipboard`)}>
-																		<Tooltip title={`Click to copy ${p.code}`} placement="left">
-																			<span className="border rounded px-2 py-1 cursor-context-menu select-none hover:border-blue-400 hover:text-blue-400">
-																				{p.code}
-																			</span>
-																		</Tooltip>
-																	</CopyToClipboard>
-																</div>
-															))}
-														</div>
-													</div>
-												))}
-											</div>
-										</div>
-									</div>
+						<div className="flex justify-center py-4 text-[20px] select-none">Settings</div>
+						<div className="w-full">
+							<label>Select Task types</label>
+							<Select
+								className="w-full"
+								mode="multiple"
+								allowClear
+								onChange={handleSelectTaskType}
+								value={taskTypes}
+								defaultValue={["common"]}
+								options={[
+									{ label: "Conversion", value: "conversion" },
+									{ label: "Communication", value: "com" },
+									{ label: "Coverage", value: "coverage" },
+									{ label: "Project Management", value: "pm" },
+									{ label: "Common", value: "common" }
+								]}
+								maxTagCount="responsive"
+								maxTagPlaceholder={omittedValues => (
+									<Tooltip title={omittedValues.map(({ label }) => label).join(", ")}>
+										<span>{`+${omittedValues?.length} more`}</span>
+									</Tooltip>
 								)}
+							/>
+						</div>
+					</div>
+				) : (
+					<div className="h-full">
+						<div className="absolute right-3 top-3">
+							<IoSettings size={20} className="cursor-pointer" onClick={() => setShowSettings(true)} />
+						</div>
+						<div className="flex justify-center py-4 text-[20px] select-none">Goodday Helper</div>
+						<div className="w-full">
+							<div className="flex w-full justify-evenly items-center">
+								<Radio.Group
+									className="grid grid-cols-2 w-full"
+									onChange={handleModeChange}
+									value={mode}
+									style={{
+										marginBottom: 8
+									}}
+								>
+									<Radio.Button value="task" className="text-center">
+										Task Codes
+									</Radio.Button>
+									<Radio.Button value="projects" className="text-center">
+										Project Codes
+									</Radio.Button>
+								</Radio.Group>
+							</div>
+
+							<div className="h-[480px]">
+								<div className="h-[30px]">
+									{mode === "projects" ? (
+										<div className="flex flex-col gap-y-[10px]">
+											<Input placeholder="Search for project code" onChange={e => setProjectInput(e.target.value)} value={projectInput} allowClear />
+
+											<div className="h-[440px] bg-white rounded">
+												<div className="h-[40px] flex justify-between text-[14px] font-[500] items-center border py-2 px-3">
+													<span>Name</span>
+													<span>Code</span>
+												</div>
+												<div className="h-[400px] overflow-y-auto py-2 px-3 flex flex-col gap-y-2">
+													{filteredProjects?.map(p => (
+														<div className="flex justify-between items-center" key={p.code}>
+															<span className="text-[12px]">{p.name}</span>
+															<CopyToClipboard text={p.code} onCopy={() => messageApi.info(`${p.code} copied to clipboard`)}>
+																<Tooltip title={`Click to copy ${p.code}`} placement="left">
+																	<span className="border rounded px-2 py-1 cursor-context-menu select-none hover:border-blue-400 hover:text-blue-400">
+																		{p.code}
+																	</span>
+																</Tooltip>
+															</CopyToClipboard>
+														</div>
+													))}
+												</div>
+											</div>
+										</div>
+									) : (
+										<div className="flex flex-col gap-y-[10px]">
+											<Input placeholder="Search for task code" onChange={e => setTaskInput(e.target.value)} value={taskInput} allowClear />
+											<div className="h-[440px] bg-white rounded">
+												<div className="h-[40px] flex justify-between text-[14px] font-[500] items-center border py-2 px-3">
+													<span>Name</span>
+													<span>Code</span>
+												</div>
+												<div className="h-[400px] overflow-y-auto py-2 px-3 flex flex-col gap-y-2">
+													{showableTask?.map(item => (
+														<div key={item?.team}>
+															<span className={cn("text-[12px] font-[900] leading-[12px] rounded-md", item.className)}>{item?.team}</span>
+															<div className="py-2 px-3 flex flex-col gap-y-2">
+																{item?.data?.map(p => (
+																	<div className="flex justify-between items-center" key={p.code}>
+																		<span className="flex items-center gap-x-1">
+																			<span className="text-[12px] leading-[12px]">{p.name}</span>
+																		</span>
+																		<CopyToClipboard text={p.code} onCopy={() => messageApi.info(`${p.code} copied to clipboard`)}>
+																			<Tooltip title={`Click to copy ${p.code}`} placement="left">
+																				<span className="border rounded px-2 py-1 cursor-context-menu select-none hover:border-blue-400 hover:text-blue-400">
+																					{p.code}
+																				</span>
+																			</Tooltip>
+																		</CopyToClipboard>
+																	</div>
+																))}
+															</div>
+														</div>
+													))}
+												</div>
+											</div>
+										</div>
+									)}
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			)}
-		</main>
-		// </div>
+				)}
+			</main>
+		</div>
 	);
 }
 
