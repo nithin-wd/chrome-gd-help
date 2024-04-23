@@ -17,12 +17,26 @@ function App() {
 	const [taskInput, setTaskInput] = useState("");
 	const [showSettings, setShowSettings] = useState(false);
 	const taskTypeInLocal = JSON.parse(localStorage.getItem("taskType") ?? '["common"]');
+	const recentsInLocal = JSON.parse(localStorage.getItem("frequently-used") ?? "{}");
+	const recents = useMemo(() => recentsInLocal, [recentsInLocal]);
 	const [taskTypes, setTaskTypes] = useState(taskTypeInLocal);
 
 	const handleSelectTaskType = e => {
 		localStorage.setItem("taskType", JSON.stringify(e));
-		console.log(e);
 		setTaskTypes(e);
+	};
+	const handleAddRecents = (p, team) => {
+		const data = recents?.data ?? [];
+		const existing = data?.find(d => d?.code === p?.code);
+		const currentData = { ...p, count: (existing?.count ?? 0) + 1, team };
+		const updatedData = data?.filter(d => d?.code !== p?.code);
+		updatedData?.push(currentData);
+		const updatedRecents = {
+			type: "recent",
+			data: updatedData.sort((a, b) => b?.count - a?.count)
+		};
+		localStorage.setItem("frequently-used", JSON.stringify(updatedRecents));
+		messageApi.info(`${p.code} copied to clipboard`);
 	};
 	const showableTask = useMemo(() => {
 		function convertData(data) {
@@ -177,7 +191,6 @@ function App() {
 		return projects.filter(pj => pj.name.toLowerCase().includes(projectInput.toLowerCase()) || pj.code.toLowerCase().includes(projectInput.toLowerCase()));
 	}, [projectInput]);
 	const isWeb = import.meta.env.VITE_APP_MODE === "web";
-	console.log({ isWeb, env: import.meta.env.VITE_APP_MODE });
 	return (
 		<div className={cn(isWeb ? "w-screen h-screen flex justify-center items-center" : "")}>
 			<main className="w-[350px] h-[600px] p-2 shadow-lg border relative">
@@ -274,6 +287,28 @@ function App() {
 													<span>Code</span>
 												</div>
 												<div className="h-[400px] overflow-y-auto py-2 px-3 flex flex-col gap-y-2">
+													{recents?.data?.length > 0 && (
+														<div>
+															<span className={cn("text-[12px] font-[900] leading-[12px] rounded-md text-red-500")}>Frequently Used</span>
+															<div className="py-2 px-3 flex flex-col gap-y-2">
+																{recents?.data?.slice(0, 5)?.map(p => (
+																	<div className="flex justify-between items-center" key={p.code}>
+																		<span className="flex flex-col  gap-y-1">
+																			<span className="text-[12px] leading-[12px]">{p.name}</span>
+																			<span className={cn("text-[8px] leading-[8px] font-[700]", p?.className)}>{p.team}</span>
+																		</span>
+																		<CopyToClipboard text={p.code} onCopy={() => handleAddRecents(p, p.team)}>
+																			<Tooltip title={`Click to copy ${p.code}`} placement="left">
+																				<span className="border rounded px-2 py-1 cursor-context-menu select-none hover:border-blue-400 hover:text-blue-400">
+																					{p.code}
+																				</span>
+																			</Tooltip>
+																		</CopyToClipboard>
+																	</div>
+																))}
+															</div>
+														</div>
+													)}
 													{showableTask?.map(item => (
 														<div key={item?.team}>
 															<span className={cn("text-[12px] font-[900] leading-[12px] rounded-md", item.className)}>{item?.team}</span>
@@ -283,7 +318,7 @@ function App() {
 																		<span className="flex items-center gap-x-1">
 																			<span className="text-[12px] leading-[12px]">{p.name}</span>
 																		</span>
-																		<CopyToClipboard text={p.code} onCopy={() => messageApi.info(`${p.code} copied to clipboard`)}>
+																		<CopyToClipboard text={p.code} onCopy={() => handleAddRecents(p, item?.team)}>
 																			<Tooltip title={`Click to copy ${p.code}`} placement="left">
 																				<span className="border rounded px-2 py-1 cursor-context-menu select-none hover:border-blue-400 hover:text-blue-400">
 																					{p.code}
