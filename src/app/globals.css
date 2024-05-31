@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	h1 {
+		@apply text-[36px] font-bold text-gray-800 mt-5 mb-5;
+	}
+	h2 {
+		@apply text-[30px] font-bold text-gray-800 mt-4 mb-4;
+	}
+	h3 {
+		@apply text-[24px] font-bold text-gray-800 mt-3 mb-3;
+	}
+	h4 {
+		@apply text-[20px] font-bold text-gray-800 mt-2 mb-2;
+	}
+	h5 {
+		@apply text-[16px] font-bold text-gray-800 mt-1 mb-1;
+	}
+	h6 {
+		@apply text-[14px] font-bold text-gray-800 mt-1 mb-1;
+	}
+}
+
