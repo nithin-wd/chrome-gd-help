@@ -5,8 +5,8 @@ export default function Home() {
 			<div>
 				<div>
 					Goodday Helper is a Chrome extension developed for the convenience of Webdura employees, providing a user interface for copying shortcut codes. At
-					Webdura, we highly value your privacy and are committed to ensuring the protection of any information you provide. This Privacy Policy outlines our
-					practices regarding the collection, use, and disclosure of personal information through the use of our Chrome extension.
+					<strong>&nbsp;Webdura</strong>, we highly value your privacy and are committed to ensuring the protection of any information you provide. This Privacy
+					Policy outlines our practices regarding the collection, use, and disclosure of personal information through the use of our Chrome extension.
 				</div>
 				<div className="mt-[40px]">
 					<h4>Collection of Information:</h4>
@@ -35,6 +35,12 @@ export default function Home() {
 					<div className="pl-5">
 						Goodday Helper does not integrate with any third-party services or APIs that may collect user data. Therefore, users can be assured that their
 						privacy remains protected while using our extension.
+					</div>
+				</div>
+				<div>
+					<h4>Api Calls:</h4>
+					<div className="pl-5">
+						Goodday Helper utilizes its internal database solely to retrieve and display saved data. We do not store any new data back into the database.
 					</div>
 				</div>
 				<div>
