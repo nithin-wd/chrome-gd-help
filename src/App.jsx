@@ -1,10 +1,11 @@
 import { Input, message, Radio, Select, Tooltip } from "antd";
 import dayjs from "dayjs";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import { IoSettings, IoCloseCircleOutline } from "react-icons/io5";
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { getData } from "./action";
 
 function App() {
 	function cn(...inputs) {
@@ -20,6 +21,7 @@ function App() {
 	const recentsInLocal = JSON.parse(localStorage.getItem("frequently-used") ?? "{}");
 	const recents = useMemo(() => recentsInLocal, [recentsInLocal]);
 	const [taskTypes, setTaskTypes] = useState(taskTypeInLocal);
+	const [task, setTask] = useState([]);
 
 	const handleSelectTaskType = e => {
 		localStorage.setItem("taskType", JSON.stringify(e));
@@ -191,6 +193,20 @@ function App() {
 		return projects.filter(pj => pj.name.toLowerCase().includes(projectInput.toLowerCase()) || pj.code.toLowerCase().includes(projectInput.toLowerCase()));
 	}, [projectInput]);
 	const isWeb = import.meta.env.VITE_APP_MODE === "web";
+
+	const fetchData = async () => {
+		try {
+			const data = await getData();
+			console.log(data);
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	useEffect(() => {
+		fetchData();
+	}, []);
+
 	return (
 		<div className={cn(isWeb ? "w-screen h-screen flex justify-center items-center" : "")}>
 			<main className="w-[350px] h-[600px] p-2 shadow-lg border relative">
