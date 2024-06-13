@@ -6,7 +6,13 @@ import { IoSettings, IoCloseCircleOutline } from "react-icons/io5";
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { getData } from "./action";
-
+const teams = [
+	{ type: "coverage", name: "Coverage", className: "text-green-500" },
+	{ type: "conversion", name: "Conversion", className: "text-blue-500" },
+	{ type: "com", name: "Communication", className: "text-pink-500" },
+	{ type: "pm", name: "Project Management", className: "text-yellow-500" },
+	{ type: "common", name: "Common", className: "text-purple-500" }
+];
 function App() {
 	function cn(...inputs) {
 		return twMerge(clsx(inputs));
@@ -21,7 +27,10 @@ function App() {
 	const recentsInLocal = JSON.parse(localStorage.getItem("frequently-used") ?? "{}");
 	const recents = useMemo(() => recentsInLocal, [recentsInLocal]);
 	const [taskTypes, setTaskTypes] = useState(taskTypeInLocal);
-	const [task, setTask] = useState([]);
+	const projectsInLocal = JSON.parse(localStorage.getItem("projects") ?? "[]");
+	const [projects, setProjects] = useState(projectsInLocal);
+	const tasksInLocal = JSON.parse(localStorage.getItem("tasks") ?? "[]");
+	const [tasks, setTasks] = useState(tasksInLocal);
 
 	const handleSelectTaskType = e => {
 		localStorage.setItem("taskType", JSON.stringify(e));
@@ -68,93 +77,7 @@ function App() {
 
 			return result;
 		}
-		const tasks = [
-			{
-				type: "coverage",
-				data: [
-					{ name: "Campaign Report", team: "Coverage", className: "text-green-500", code: "crep" },
-					{ name: "Campaign Analysis", team: "Coverage", className: "text-green-500", code: "caan" },
-					{ name: "Campaign Setup", team: "Coverage", className: "text-green-500", code: "case" },
-					{ name: "Campaign Plan", team: "Coverage", className: "text-green-500", code: "capl" },
-					{ name: "Campaign Review", team: "Coverage", className: "text-green-500", code: "care" },
-					{ name: "Social Media Management", team: "Coverage", className: "text-green-500", code: "smm" },
-					{ name: "Budget Management", team: "Coverage", className: "text-green-500", code: "bm" },
-					{ name: "Report setup", team: "Coverage", className: "text-green-500", code: "rese" }
-				]
-			},
-			{
-				type: "conversion",
-				data: [
-					{ name: "On request report ", team: "Conversion", className: "text-blue-500", code: "orr" },
-					{ name: "On request report internal", team: "Conversion", className: "text-blue-500", code: "orri" },
-					{ name: "On request report external", team: "Conversion", className: "text-blue-500", code: "orre" },
-					{ name: "Scheduled report", team: "Conversion", className: "text-blue-500", code: "scre" },
-					{ name: "Data research & production", team: "Conversion", className: "text-blue-500", code: "drpr" },
-					{ name: "GR Production", team: "Conversion", className: "text-blue-500", code: "grpr" },
-					{ name: "Retention plan", team: "Conversion", className: "text-blue-500", code: "repl" },
-					{ name: "Retention setup", team: "Conversion", className: "text-blue-500", code: "rese" },
-					{ name: "Retention review", team: "Conversion", className: "text-blue-500", code: "rere" },
-					{ name: "Conversion tracking", team: "Conversion", className: "text-blue-500", code: "cotr" },
-					{ name: "Landing page development", team: "Conversion", className: "text-blue-500", code: "lpde" },
-					{ name: "Client tech support", team: "Conversion", className: "text-blue-500", code: "clts" },
-					{ name: "Documentation", team: "Conversion", className: "text-blue-500", code: "docu" },
-					{ name: "Research", team: "Conversion", className: "text-blue-500", code: "rsch" },
-					{ name: "General Meeting", team: "Conversion", className: "text-blue-500", code: "geme" },
-					{ name: "Guidance", team: "Conversion", className: "text-blue-500", code: "guid" },
-					{ name: "Lead form integration", team: "Conversion", className: "text-blue-500", code: "lfin" },
-					{ name: "Creative production", team: "Conversion", className: "text-blue-500", code: "crpr" },
-					{ name: "SEO support", team: "Conversion", className: "text-blue-500", code: "seos" },
-					{ name: "Technology Audit", team: "Conversion", className: "text-blue-500", code: "teca" },
-					{ name: "Misc", team: "Conversion", className: "text-blue-500", code: "misc" }
-				]
-			},
-			{
-				type: "com",
-				data: [
-					{ name: "Briefing", team: "Communication", className: "text-pink-500", code: "cobr" },
-					{ name: "Content Creation", team: "Communication", className: "text-pink-500", code: "cocr" },
-					{ name: "Image Production", team: "Communication", className: "text-pink-500", code: "impr" },
-					{ name: "UGC Production", team: "Communication", className: "text-pink-500", code: "ugpr" },
-					{ name: "Video Production", team: "Communication", className: "text-pink-500", code: "vipr" },
-					{ name: "Client Approval", team: "Communication", className: "text-pink-500", code: "clap" },
-					{ name: "Review", team: "Communication", className: "text-pink-500", code: "core" },
-					{ name: "Internal Content [NR]", team: "Communication", className: "text-pink-500", code: "cone" },
-					{ name: "Internal Image [NR]", team: "Communication", className: "text-pink-500", code: "imne" },
-					{ name: "Internal Video [NR]", team: "Communication", className: "text-pink-500", code: "vine" },
-					{ name: "Internal Content [CR]", team: "Communication", className: "text-pink-500", code: "icocr" },
-					{ name: "Internal Image [CR]", team: "Communication", className: "text-pink-500", code: "imcr" },
-					{ name: "Internal Video [CR]", team: "Communication", className: "text-pink-500", code: "vicr" },
-					{ name: "Internal UGC [CR]", team: "Communication", className: "text-pink-500", code: "ugcr" },
-					{ name: "External Content [NR]", team: "Communication", className: "text-pink-500", code: "xcone" },
-					{ name: "External Image [NR]", team: "Communication", className: "text-pink-500", code: "ximne" },
-					{ name: "External Video [NR]", team: "Communication", className: "text-pink-500", code: "xvine" },
-					{ name: "External Content [CR]", team: "Communication", className: "text-pink-500", code: "xcocr" },
-					{ name: "External Image [CR]", team: "Communication", className: "text-pink-500", code: "ximcr" },
-					{ name: "External Video [CR]", team: "Communication", className: "text-pink-500", code: "xvicr" },
-					{ name: "External UGC [CR]", team: "Communication", className: "text-pink-500", code: "xugcr" },
-					{ name: "Vendor Management", team: "Communication", className: "text-pink-500", code: "vm" }
-				]
-			},
-			{
-				type: "pm",
-				data: [
-					{ name: "Project coordination", team: "Project Management", className: "text-yellow-500", code: "wdpc" },
-					{ name: "Team work load & Task management", team: "Project Management", className: "text-yellow-500", code: "wdtm" },
-					{ name: "Good day housekeeping", team: "Project Management", className: "text-yellow-500", code: "gdhk" },
-					{ name: "Client approvals / activity", team: "Project Management", className: "text-yellow-500", code: "clap" }
-				]
-			},
-			{
-				type: "common",
-				data: [
-					{ name: "Internal meetings", team: "Common", className: "text-purple-500", code: "inme" },
-					{ name: "HR Activities", team: "Common", className: "text-purple-500", code: "hrac" },
-					{ name: "Learning & research", team: "Common", className: "text-purple-500", code: "lnr" },
-					{ name: "Client meetings", team: "Common", className: "text-purple-500", code: "clme" },
-					{ name: "CRM Activity", team: "Common", className: "text-purple-500", code: "crac" }
-				]
-			}
-		];
+
 		const selectedTasks = tasks
 			.filter(task => taskTypes.includes(task.type))
 			?.map(task => task?.data)
@@ -163,41 +86,38 @@ function App() {
 		return convertData(
 			selectedTasks.filter(pj => pj.name.toLowerCase().includes(taskInput.toLowerCase()) || pj.code.toLowerCase().includes(taskInput.toLowerCase()))
 		);
-	}, [taskTypes, taskInput]);
+	}, [taskTypes, taskInput, tasks]);
 	const handleModeChange = e => {
 		setMode(e.target.value);
 	};
 	const filteredProjects = useMemo(() => {
-		const projects = [
-			{ name: "Canny Life Space", code: "CLS" },
-			{ name: "Confident Group Kottayam", code: "CGKTYM" },
-			{ name: "Confident Group Kochi", code: "CGK" },
-			{ name: "Confident Group Kozhikode", code: "CGCLT" },
-			{ name: "Confident Group Thrissur", code: "CGTHR" },
-			{ name: "Confident Group Trivandrum", code: "CGTVM" },
-			{ name: "Confident Group UAE", code: "CGUAE" },
-			{ name: "Confident Group General", code: `CG-${dayjs().format("MMMM").toUpperCase()}` },
-			{ name: "English Channel", code: "EC" },
-			{ name: "Fair Future", code: "FF" },
-			{ name: "Fortune Study Abroad", code: "FSA" },
-			{ name: "Fortune Tours", code: "FT" },
-			{ name: "Matglober", code: "MTG" },
-			{ name: "Victoria Realtors", code: "VR" },
-			{ name: "Webdura", code: "WD" },
-			{ name: "Webdura Internal Processes", code: "WDPR" },
-			{ name: "Asianet News", code: "ASNT" },
-			{ name: "D2R Interiors", code: "D2R" },
-			{ name: "Speed Infra", code: "SI" }
-		];
 		if (projectInput === "") return projects;
 		return projects.filter(pj => pj.name.toLowerCase().includes(projectInput.toLowerCase()) || pj.code.toLowerCase().includes(projectInput.toLowerCase()));
-	}, [projectInput]);
+	}, [projectInput, projects]);
 	const isWeb = import.meta.env.VITE_APP_MODE === "web";
 
 	const fetchData = async () => {
 		try {
-			const data = await getData();
-			console.log(data);
+			const res = await getData();
+
+			const projectArray = res?.data?.projects?.map(project => ({
+				name: project?.["Project Name"],
+				code: project?.["Task Code"].includes("[MONTH]")
+					? project?.["Task Code"].replace("[MONTH]", dayjs().format("MMMM").toUpperCase())
+					: project?.["Task Code"]
+			}));
+			localStorage.setItem("projects", JSON.stringify(projectArray));
+			setProjects(projectArray);
+
+			const taskArray = teams.map(team => ({
+				type: team?.type,
+				data: res?.data?.tasks
+					?.filter(task => task?.["Department Code"] === team?.type && task?.["Active/Inactive"].toLowerCase() === "active")
+					?.map(task => ({ name: task?.["Task Category"], team: team?.name, className: "text-purple-500", code: task?.["Category Code"] }))
+			}));
+			localStorage.setItem("tasks", JSON.stringify(taskArray));
+
+			setTasks(taskArray);
 		} catch (error) {
 			console.log(error);
 		}

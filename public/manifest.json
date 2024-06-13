@@ -7,5 +7,6 @@
 		"default_title": "Goodday Helper",
 		"default_popup": "index.html",
 		"default_icon": "helper.png"
-	}
+	},
+	"host_permissions": ["https://www.developer.chrome.com/*", "https://chrome-gd-help.vercel.app/*"]
 }
