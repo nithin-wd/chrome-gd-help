@@ -6,6 +6,7 @@ import { IoSettings, IoCloseCircleOutline } from "react-icons/io5";
 import { clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { getData } from "./action";
+import { FaRegCopyright } from "react-icons/fa";
 const teams = [
 	{ type: "coverage", name: "Coverage", className: "text-green-500" },
 	{ type: "conversion", name: "Conversion", className: "text-blue-500" },
@@ -136,30 +137,37 @@ function App() {
 						<div className="absolute right-3 top-3">
 							<IoCloseCircleOutline size={20} className="cursor-pointer" onClick={() => setShowSettings(false)} />
 						</div>
-						<div className="flex justify-center py-4 text-[20px] select-none">Settings</div>
-						<div className="w-full">
-							<label>Select Task types</label>
-							<Select
-								className="w-full"
-								mode="multiple"
-								allowClear
-								onChange={handleSelectTaskType}
-								value={taskTypes}
-								defaultValue={["common"]}
-								options={[
-									{ label: "Conversion", value: "conversion" },
-									{ label: "Communication", value: "com" },
-									{ label: "Coverage", value: "coverage" },
-									{ label: "Project Management", value: "pm" },
-									{ label: "Common", value: "common" }
-								]}
-								maxTagCount="responsive"
-								maxTagPlaceholder={omittedValues => (
-									<Tooltip title={omittedValues.map(({ label }) => label).join(", ")}>
-										<span>{`+${omittedValues?.length} more`}</span>
-									</Tooltip>
-								)}
-							/>
+						<div className="flex justify-center pb-4 text-[20px] select-none">Settings</div>
+						<div className="flex justify-center text-[20px] select-none">Goodday Helper</div>
+						<div className="h-[20px] flex items-center justify-center gap-[5px] text-[10px] font-[600]">{`Version: ${import.meta.env.PACKAGE_VERSION}`}</div>
+						<div className="grid grid-rows-[auto_10px] h-[480px] mt-[5px]">
+							<div className="w-full">
+								<label className="">Select Task types</label>
+								<Select
+									className="w-full mt-[8px]"
+									mode="multiple"
+									allowClear
+									onChange={handleSelectTaskType}
+									value={taskTypes}
+									defaultValue={["common"]}
+									options={[
+										{ label: "Conversion", value: "conversion" },
+										{ label: "Communication", value: "com" },
+										{ label: "Coverage", value: "coverage" },
+										{ label: "Project Management", value: "pm" },
+										{ label: "Common", value: "common" }
+									]}
+									maxTagCount="responsive"
+									maxTagPlaceholder={omittedValues => (
+										<Tooltip title={omittedValues.map(({ label }) => label).join(", ")}>
+											<span>{`+${omittedValues?.length} more`}</span>
+										</Tooltip>
+									)}
+								/>
+							</div>
+							<div className="flex items-center text-[14px] justify-end gap-x-[5px]">
+								<FaRegCopyright /> Webdura
+							</div>
 						</div>
 					</div>
 				) : (
@@ -167,7 +175,7 @@ function App() {
 						<div className="absolute right-3 top-3">
 							<IoSettings size={20} className="cursor-pointer" onClick={() => setShowSettings(true)} />
 						</div>
-						<div className="flex justify-center py-4 text-[20px] select-none">Goodday Helper</div>
+						<div className="flex justify-center pb-4 pt-0 text-[20px] select-none">Goodday Helper</div>
 						<div className="w-full">
 							<div className="flex w-full justify-evenly items-center">
 								<Radio.Group
@@ -188,90 +196,97 @@ function App() {
 							</div>
 
 							<div className="h-[480px]">
-								<div className="h-[30px]">
-									{mode === "projects" ? (
-										<div className="flex flex-col gap-y-[10px]">
-											<Input placeholder="Search for project code" onChange={e => setProjectInput(e.target.value)} value={projectInput} allowClear />
+								{mode === "projects" ? (
+									<div className="flex flex-col gap-y-[10px]">
+										<Input
+											placeholder="Search for project code"
+											onChange={e => setProjectInput(e.target.value)}
+											value={projectInput}
+											allowClear
+											className="h-[40px]"
+										/>
 
-											<div className="h-[440px] bg-white rounded">
-												<div className="h-[40px] flex justify-between text-[14px] font-[500] items-center border py-2 px-3">
-													<span>Name</span>
-													<span>Code</span>
-												</div>
-												<div className="h-[400px] overflow-y-auto py-2 px-3 flex flex-col gap-y-2">
-													{filteredProjects?.map(p => (
-														<div className="flex justify-between items-center" key={p.code}>
-															<span className="text-[12px]">{p.name}</span>
-															<CopyToClipboard text={p.code} onCopy={() => messageApi.info(`${p.code} copied to clipboard`)}>
-																<Tooltip title={`Click to copy ${p.code}`} placement="left">
-																	<span className="border rounded px-2 py-1 cursor-context-menu select-none hover:border-blue-400 hover:text-blue-400">
-																		{p.code}
+										<div className="h-[430px] bg-white rounded">
+											<div className="h-[40px] flex justify-between text-[14px] font-[500] items-center border py-2 px-3">
+												<span>Name</span>
+												<span>Code</span>
+											</div>
+											<div className="h-[390px] overflow-y-auto py-2 px-3 flex flex-col gap-y-2">
+												{filteredProjects?.map(p => (
+													<div className="flex justify-between items-center" key={p.code}>
+														<span className="text-[12px]">{p.name}</span>
+														<CopyToClipboard text={p.code} onCopy={() => messageApi.info(`${p.code} copied to clipboard`)}>
+															<Tooltip title={`Click to copy ${p.code}`} placement="left">
+																<span className="border rounded px-2 py-1 cursor-context-menu select-none hover:border-blue-400 hover:text-blue-400">
+																	{p.code}
+																</span>
+															</Tooltip>
+														</CopyToClipboard>
+													</div>
+												))}
+											</div>
+										</div>
+									</div>
+								) : (
+									<div className="flex flex-col gap-y-[10px]">
+										<Input placeholder="Search for task code" onChange={e => setTaskInput(e.target.value)} value={taskInput} allowClear className="h-[40px]" />
+										<div className="h-[430px] bg-white rounded">
+											<div className="h-[40px] flex justify-between text-[14px] font-[500] items-center border py-2 px-3">
+												<span>Name</span>
+												<span>Code</span>
+											</div>
+											<div className="h-[390px] overflow-y-auto py-2 px-3 flex flex-col gap-y-2">
+												{recents?.data?.length > 0 && (
+													<div>
+														<span className={cn("text-[12px] font-[900] leading-[12px] rounded-md text-red-500")}>Frequently Used</span>
+														<div className="py-2 px-3 flex flex-col gap-y-2">
+															{recents?.data?.slice(0, 5)?.map(p => (
+																<div className="flex justify-between items-center" key={p.code}>
+																	<span className="flex flex-col  gap-y-1">
+																		<span className="text-[12px] leading-[12px]">{p.name}</span>
+																		<span className={cn("text-[8px] leading-[8px] font-[700]", p?.className)}>{p.team}</span>
 																	</span>
-																</Tooltip>
-															</CopyToClipboard>
+																	<CopyToClipboard text={p.code} onCopy={() => handleAddRecents(p, p.team)}>
+																		<Tooltip title={`Click to copy ${p.code}`} placement="left">
+																			<span className="border rounded px-2 py-1 cursor-context-menu select-none hover:border-blue-400 hover:text-blue-400">
+																				{p.code}
+																			</span>
+																		</Tooltip>
+																	</CopyToClipboard>
+																</div>
+															))}
 														</div>
-													))}
-												</div>
+													</div>
+												)}
+												{showableTask?.map(item => (
+													<div key={item?.team}>
+														<span className={cn("text-[12px] font-[900] leading-[12px] rounded-md", item.className)}>{item?.team}</span>
+														<div className="py-2 px-3 flex flex-col gap-y-2">
+															{item?.data?.map(p => (
+																<div className="flex justify-between items-center" key={p.code}>
+																	<span className="flex items-center gap-x-1">
+																		<span className="text-[12px] leading-[12px]">{p.name}</span>
+																	</span>
+																	<CopyToClipboard text={p.code} onCopy={() => handleAddRecents(p, item?.team)}>
+																		<Tooltip title={`Click to copy ${p.code}`} placement="left">
+																			<span className="border rounded px-2 py-1 cursor-context-menu select-none hover:border-blue-400 hover:text-blue-400">
+																				{p.code}
+																			</span>
+																		</Tooltip>
+																	</CopyToClipboard>
+																</div>
+															))}
+														</div>
+													</div>
+												))}
 											</div>
 										</div>
-									) : (
-										<div className="flex flex-col gap-y-[10px]">
-											<Input placeholder="Search for task code" onChange={e => setTaskInput(e.target.value)} value={taskInput} allowClear />
-											<div className="h-[440px] bg-white rounded">
-												<div className="h-[40px] flex justify-between text-[14px] font-[500] items-center border py-2 px-3">
-													<span>Name</span>
-													<span>Code</span>
-												</div>
-												<div className="h-[400px] overflow-y-auto py-2 px-3 flex flex-col gap-y-2">
-													{recents?.data?.length > 0 && (
-														<div>
-															<span className={cn("text-[12px] font-[900] leading-[12px] rounded-md text-red-500")}>Frequently Used</span>
-															<div className="py-2 px-3 flex flex-col gap-y-2">
-																{recents?.data?.slice(0, 5)?.map(p => (
-																	<div className="flex justify-between items-center" key={p.code}>
-																		<span className="flex flex-col  gap-y-1">
-																			<span className="text-[12px] leading-[12px]">{p.name}</span>
-																			<span className={cn("text-[8px] leading-[8px] font-[700]", p?.className)}>{p.team}</span>
-																		</span>
-																		<CopyToClipboard text={p.code} onCopy={() => handleAddRecents(p, p.team)}>
-																			<Tooltip title={`Click to copy ${p.code}`} placement="left">
-																				<span className="border rounded px-2 py-1 cursor-context-menu select-none hover:border-blue-400 hover:text-blue-400">
-																					{p.code}
-																				</span>
-																			</Tooltip>
-																		</CopyToClipboard>
-																	</div>
-																))}
-															</div>
-														</div>
-													)}
-													{showableTask?.map(item => (
-														<div key={item?.team}>
-															<span className={cn("text-[12px] font-[900] leading-[12px] rounded-md", item.className)}>{item?.team}</span>
-															<div className="py-2 px-3 flex flex-col gap-y-2">
-																{item?.data?.map(p => (
-																	<div className="flex justify-between items-center" key={p.code}>
-																		<span className="flex items-center gap-x-1">
-																			<span className="text-[12px] leading-[12px]">{p.name}</span>
-																		</span>
-																		<CopyToClipboard text={p.code} onCopy={() => handleAddRecents(p, item?.team)}>
-																			<Tooltip title={`Click to copy ${p.code}`} placement="left">
-																				<span className="border rounded px-2 py-1 cursor-context-menu select-none hover:border-blue-400 hover:text-blue-400">
-																					{p.code}
-																				</span>
-																			</Tooltip>
-																		</CopyToClipboard>
-																	</div>
-																))}
-															</div>
-														</div>
-													))}
-												</div>
-											</div>
-										</div>
-									)}
-								</div>
+									</div>
+								)}
 							</div>
+						</div>
+						<div className="h-[20px] flex items-center justify-end pe-[10px] gap-[5px] text-[10px] font-[600]">
+							<FaRegCopyright /> {`Version: ${import.meta.env.PACKAGE_VERSION}`}
 						</div>
 					</div>
 				)}
